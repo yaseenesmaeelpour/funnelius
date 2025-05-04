@@ -1,4 +1,4 @@
-# Funnelius
+![Screenshot](https://github.com/user-attachments/assets/95575895-b11f-4a6a-b15c-7a40617bf2ca)# Funnelius
 
 **Funnelius** is an open-source Python library designed to analyze and visualize complex, non-linear user funnels. Built with Pandas, Graphviz, and Streamlit, it allows data scientists and analysts to easily track user journeys, calculate conversion rates, and identify bottlenecks in real-time.
 
@@ -45,17 +45,17 @@ Funnelius will process this data and generate a visual funnel with conversion ra
 
 You can pass this optional parameters to fine tune funnel: 
 
-- df: The input pandas DataFrame containing user journey data with user_id, action, and action_start columns.
+- **df:** The input pandas DataFrame containing user journey data with user_id, action, and action_start columns.
 
-- title: Filename (without extension) used for exporting the final funnel visualization as a PDF.
+- **title:** Filename (without extension) used for exporting the final funnel visualization as a PDF.
 
-- first_activities_filter: Optional list of starting actions to include; filters out journeys that begin with other actions.
+- **first_activities_filter:** Optional list of starting actions to include; filters out journeys that begin with other actions.
 
-- goals: List of actions that define successful completion of the journey (used to calculate conversion).
+- **goals:** List of actions that define successful completion of the journey (used to calculate conversion).
 
-- max_path_num: Maximum number of unique user paths to display in the graph; 0 means show all.
+- **max_path_num:** Maximum number of unique user paths to display in the graph; 0 means show all.
 
-- show_drop: Boolean flag to include or exclude drop-off data from the funnel visualization.
+- **show_drop:** Boolean flag to include or exclude drop-off data from the funnel visualization.
 
 ### Streamlit GUI
 
