@@ -52,8 +52,9 @@ Run the app with:
 ```bash
 streamlit run interactive.py
 ```
+screenshot:
 
-![screenshot](images/Screenshot.png)
+<kbd><img src="images/Screenshot.png" alt="My Image with Gray Border" style="border:2px solid #000;"></kbd>
 
 ## Contributing
 
