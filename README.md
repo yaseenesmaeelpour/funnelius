@@ -53,6 +53,8 @@ Run the app with:
 streamlit run interactive.py
 ```
 
+![screenshot](images/Screenshot.png)
+
 ## Contributing
 
 I welcome contributions! Feel free to open issues, or submit pull requests to help improve Funnelius.
