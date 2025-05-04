@@ -109,8 +109,8 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
     conditional_format_gradiant_color = [[255,200,200],[255,255,255],[200,255,200]] #red-->white-->green gradient
 
     #initialize graphvize engine
-    dot = graphviz.Digraph(comment=title)
-    dot.attr(label=title, labelloc='top', fontsize='20', fontcolor='black', bgcolor=bgcolor)
+    dot = graphviz.Digraph(comment='')
+    dot.attr(label='', labelloc='top', fontsize='20', fontcolor='black', bgcolor=bgcolor)
 
     nodes_start_data = agg_data[['action','users','conversion_rate','duration_median', 'percent_of_total']].drop_duplicates()
     nodes_end_data = agg_data[~agg_data['action_next'].isin(agg_data['action'])]
@@ -128,7 +128,7 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
         elif row['action'][:4] == 'Drop':
             color = '#ffc8c8'
             shape = 'cds'
-            label = '98% ('+str(row['users'])+')'
+            label = format(1-row['conversion_rate'], '%')+' ('+str((1-row['conversion_rate'])*row['users'])+')'
 
         else:
             shape = 'box'

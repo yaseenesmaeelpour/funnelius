@@ -1,6 +1,5 @@
-// sample_data_vehicle
 digraph {
-	bgcolor="#ffffff" fontcolor=black fontsize=20 label=sample_data_vehicle labelloc=top
+	bgcolor="#ffffff" fontcolor=black fontsize=20 label="" labelloc=top
 	Start [label=Start fillcolor="#fff" href="https://test.com" penwidth=0.2 shape=circle style="filled, rounded" tooltip=Start]
 	battery_health [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
@@ -173,23 +172,23 @@ digraph {
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
             > fillcolor="#d6ffd6" href="https://test.com" penwidth=0.2 shape=box style="filled, rounded" tooltip=year]
-	Dropbattery_health [label="98% (46)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbattery_health]
-	Dropbike_range [label="98% (21)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_range]
-	Dropbike_repairs [label="98% (48)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_repairs]
-	Dropbike_type [label="98% (61)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_type]
-	Dropcondition [label="98% (138)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropcondition]
-	Dropdata_posted [label="98% (103)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropdata_posted]
-	Dropfuel_type [label="98% (41)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropfuel_type]
-	Dropmake [label="98% (346)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmake]
-	Dropmileage [label="98% (273)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmileage]
-	Dropmodel [label="98% (49)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmodel]
-	Dropmotorcycle_power [label="98% (50)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmotorcycle_power]
-	Dropmotorcycle_style [label="98% (61)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmotorcycle_style]
-	Droppostal_code [label="98% (396)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droppostal_code]
-	Droptruck_type [label="98% (56)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droptruck_type]
-	Droptruck_usage [label="98% (48)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droptruck_usage]
-	Dropvehicle_type [label="98% (374)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropvehicle_type]
-	Dropyear [label="98% (314)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropyear]
+	Dropbattery_health [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbattery_health]
+	Dropbike_range [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_range]
+	Dropbike_repairs [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_repairs]
+	Dropbike_type [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_type]
+	Dropcondition [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropcondition]
+	Dropdata_posted [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropdata_posted]
+	Dropfuel_type [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropfuel_type]
+	Dropmake [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmake]
+	Dropmileage [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmileage]
+	Dropmodel [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmodel]
+	Dropmotorcycle_power [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmotorcycle_power]
+	Dropmotorcycle_style [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmotorcycle_style]
+	Droppostal_code [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droppostal_code]
+	Droptruck_type [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droptruck_type]
+	Droptruck_usage [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Droptruck_usage]
+	Dropvehicle_type [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropvehicle_type]
+	Dropyear [label="nan% (nan)" fillcolor="#ffc8c8" href="https://test.com" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropyear]
 	Start -> postal_code [label=396 color="#c8c8c8" dir=forward headport=center penwidth=20.0 style=solid tailport=center weight=7]
 	battery_health -> Dropbattery_health [label="" color="#ffc8c8" dir=forward headport=center penwidth=0.5555555555555556 style=solid tailport=center weight=1]
 	battery_health -> condition [label=35 color="#c8c8c8" dir=forward headport=center penwidth=1.7676767676767677 style=solid tailport=center weight=7]

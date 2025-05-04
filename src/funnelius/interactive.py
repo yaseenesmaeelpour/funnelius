@@ -43,7 +43,7 @@ if csv_file is not None:
 
     general_file_name = csv_file.name.split('.')[0]
 
-    draw(data, goals, min_edge_count, max_edge_width, general_file_name, show_drop, ['svg','pdf'])
+    draw(data, goals, min_edge_count, max_edge_width, 'general_file_name', show_drop, ['svg','pdf'])
     st.image(general_file_name+'.svg',width=1000)
     with open(general_file_name+'.pdf', 'rb') as file:
         st.sidebar.download_button(
