@@ -10,7 +10,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>76%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#e2ffe2" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=battery_health]
+            > fillcolor="#ffdbdb" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=battery_health]
 	bike_range [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>bike_range</B></TD></TR>
@@ -20,7 +20,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>81%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#dcffdc" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_range]
+            > fillcolor="#ffeeee" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_range]
 	bike_repairs [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>bike_repairs</B></TD></TR>
@@ -30,7 +30,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>71%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#e8ffe8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_repairs]
+            > fillcolor="#ffc8c8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_repairs]
 	bike_type [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>bike_type</B></TD></TR>
@@ -40,7 +40,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>85%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#d8ffd8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_type]
+            > fillcolor="#fffefe" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=bike_type]
 	condition [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>condition</B></TD></TR>
@@ -50,17 +50,17 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>75%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#e3ffe3" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=condition]
+            > fillcolor="#ffd6d6" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=condition]
 	data_posted [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>data_posted</B></TD></TR>
                 <TR><TD COLSPAN="2" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>
                 <TR><TD ALIGN="LEFT">Users:</TD><TD>103</TD></TR>
                 <TR><TD ALIGN="LEFT">% of total users:</TD><TD>26%</TD></TR>
-                <TR><TD ALIGN="LEFT">Conversion:</TD><TD>0%</TD></TR>
+                <TR><TD ALIGN="LEFT">Conversion:</TD><TD>100%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>0</TD></TR>
             </TABLE>
-            > fillcolor="#ffc8c8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=data_posted]
+            > fillcolor="#c8ffc8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=data_posted]
 	email [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>email</B></TD></TR>
@@ -80,7 +80,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>88%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#d5ffd5" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=fuel_type]
+            > fillcolor="#f5fff5" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=fuel_type]
 	make [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>make</B></TD></TR>
@@ -90,7 +90,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>91%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#d2ffd2" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=make]
+            > fillcolor="#eaffea" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=make]
 	mileage [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>mileage</B></TD></TR>
@@ -100,7 +100,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>83%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#daffda" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=mileage]
+            > fillcolor="#fff6f6" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=mileage]
 	model [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>model</B></TD></TR>
@@ -110,7 +110,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>84%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#d9ffd9" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=model]
+            > fillcolor="#fff8f8" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=model]
 	motorcycle_power [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>motorcycle_power</B></TD></TR>
@@ -120,7 +120,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>88%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#d5ffd5" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=motorcycle_power]
+            > fillcolor="#f5fff5" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=motorcycle_power]
 	motorcycle_style [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>motorcycle_style</B></TD></TR>
@@ -130,7 +130,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>82%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#dbffdb" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=motorcycle_style]
+            > fillcolor="#fff1f1" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=motorcycle_style]
 	postal_code [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>postal_code</B></TD></TR>
@@ -140,7 +140,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>94%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#ceffce" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=postal_code]
+            > fillcolor="#dcffdc" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=postal_code]
 	repairs_accidents [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>repairs_accidents</B></TD></TR>
@@ -160,7 +160,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>86%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#d7ffd7" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=truck_type]
+            > fillcolor="#fdfffd" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=truck_type]
 	truck_usage [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>truck_usage</B></TD></TR>
@@ -170,7 +170,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>73%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#e5ffe5" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=truck_usage]
+            > fillcolor="#ffcfcf" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=truck_usage]
 	vehicle_type [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>vehicle_type</B></TD></TR>
@@ -180,7 +180,7 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>93%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>8</TD></TR>
             </TABLE>
-            > fillcolor="#d0ffd0" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=vehicle_type]
+            > fillcolor="#e4ffe4" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=vehicle_type]
 	year [label=<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>year</B></TD></TR>
@@ -190,13 +190,13 @@ digraph {
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>87%</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>7</TD></TR>
             </TABLE>
-            > fillcolor="#d6ffd6" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=year]
+            > fillcolor="#f9fff9" href="" penwidth=0.2 shape=box style="filled, rounded" tooltip=year]
 	Dropbattery_health [label="24% (11)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbattery_health]
 	Dropbike_range [label="19% (4)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_range]
 	Dropbike_repairs [label="29% (14)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_repairs]
 	Dropbike_type [label="15% (9)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropbike_type]
 	Dropcondition [label="25% (35)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropcondition]
-	Dropdata_posted [label="100% (103)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropdata_posted]
+	End [label=End fillcolor="#fff" href="" penwidth=0.2 shape=circle style="filled, rounded" tooltip=End]
 	Dropfuel_type [label="12% (5)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropfuel_type]
 	Dropmake [label="9% (32)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmake]
 	Dropmileage [label="17% (46)" fillcolor="#ffc8c8" href="" penwidth=0.2 shape=cds style="filled, rounded" tooltip=Dropmileage]
@@ -220,7 +220,7 @@ digraph {
 	bike_type -> bike_repairs [label=31 color="#c8c8c8" dir=forward headport=center penwidth=1.5656565656565657 style=solid tailport=center weight=7]
 	condition -> Dropcondition [label="" color="#ffc8c8" dir=forward headport=center penwidth=1.7676767676767677 style=solid tailport=center weight=1]
 	condition -> email [label=103 color="#c8c8c8" dir=forward headport=center penwidth=5.202020202020202 style=solid tailport=center weight=7]
-	data_posted -> Dropdata_posted [label="" color="#ffc8c8" dir=forward headport=center penwidth=5.202020202020202 style=solid tailport=center weight=1]
+	data_posted -> End [label=103 color="#c8c8c8" dir=forward headport=center penwidth=5.202020202020202 style=solid tailport=center weight=7]
 	email -> data_posted [label=103 color="#c8c8c8" dir=forward headport=center penwidth=5.202020202020202 style=solid tailport=center weight=7]
 	fuel_type -> Dropfuel_type [label="" color="#ffc8c8" dir=forward headport=center penwidth=0.5 style=solid tailport=center weight=1]
 	fuel_type -> battery_health [label=18 color="#c8c8c8" dir=forward headport=center penwidth=0.9090909090909092 style=solid tailport=center weight=7]
