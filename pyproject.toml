@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 
-name = "funnelius_yaseen"
+name = "funnelius"
 
 version = "0.0.1"
 

@@ -206,4 +206,11 @@ def render(df, title='export', first_activities_filter = [], goals = [], max_pat
     data = aggregate(data, route_num)
     draw(data, goals, min_edge_count, max_edge_width, title, show_drop, ['pdf'])
 
+def interactive():
+    import subprocess
+    import os
+    package_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(package_dir, "interactive.py")
+    result = subprocess.run(["streamlit", "run", file_path], capture_output=True, text=True)
+    print(result.stdout)
 

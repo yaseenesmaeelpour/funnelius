@@ -1,3 +1,23 @@
+Metadata-Version: 2.4
+Name: funnelius
+Version: 0.0.1
+Summary: Funnelius is an open-source Python library designed to analyze and visualize complex, non-linear user funnels.
+Author-email: Yaseen Esmaeelpour <yaseenes@gmail.com>
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/yaseenesmaeelpour/funnelius
+Project-URL: Issues, https://github.com/yaseenesmaeelpour/funnelius/issues
+Keywords: funnel,journey,path,graph
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=2.2.3
+Requires-Dist: numpy>=2.2.5
+Requires-Dist: streamlit>=1.44.1
+Requires-Dist: graphviz>=0.20.3
+Dynamic: license-file
+
 ![Screenshot](https://github.com/user-attachments/assets/95575895-b11f-4a6a-b15c-7a40617bf2ca)# Funnelius
 
 **Funnelius** is an open-source Python library designed to analyze and visualize complex, non-linear user funnels. Built with Pandas, Graphviz, and Streamlit, it allows data scientists and analysts to easily track user journeys, calculate conversion rates, and identify bottlenecks in real-time.
@@ -61,11 +81,9 @@ You can pass this optional parameters to fine tune funnel:
 
 The library includes an interactive user interface powered by Streamlit, allowing you to visualize and tweak funnel parameters in real-time.
 
-Run the app python:
-
-```python
-import funnelius as f
-f.interactive()
+Run the app with:
+```bash
+streamlit run interactive.py
 ```
 screenshot:
 
