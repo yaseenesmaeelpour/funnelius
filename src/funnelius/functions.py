@@ -194,18 +194,13 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
     for ext in export_formats:       
         dot.render(title, view=False, format=ext)
 
-def render(df, title):
+def render(df, title='', first_activities_filter = [], goals = [], max_path_num = 1, show_drop = True):
     max_edge_width = 20
-    first_activities_filter =[]
-    goals = ['']
-    max_path_num = 0
     min_edge_count = 0
-    title = ''
-    show_drop = true
 
-    data, first_activities, all_activities = transform(df)
-    data, route_num =  apply_filter(data, first_activities_filter, goals)
-    data = aggregate(data, max_routes)
-    draw(data, goals, min_edge_count, max_edge_width, title, show_drop, ['pdf'])
+    # data, first_activities, all_activities = transform(df)
+    # data, route_num =  apply_filter(data, first_activities_filter, goals)
+    # data = aggregate(data, min(max_routes,max_path_num))
+    # draw(data, goals, min_edge_count, max_edge_width, title, show_drop, ['pdf'])
 
 
