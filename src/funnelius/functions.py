@@ -114,7 +114,7 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
 
     nodes_start_data = agg_data[['action','users','conversion_rate','duration_median', 'percent_of_total']].drop_duplicates()
     nodes_end_data = agg_data[~agg_data['action_next'].isin(agg_data['action'])]
-    nodes_end_data = nodes_end_data[['action_next', 'users']]
+    nodes_end_data = nodes_end_data[['action_next', 'conversion_rate', 'users']]
     nodes_end_data.rename(columns={'action_next':'action'}, inplace=True)
     nodes_end_data.drop_duplicates(inplace=True)
     nodes_data = pd.concat([nodes_start_data,nodes_end_data])
@@ -128,7 +128,7 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
         elif row['action'][:4] == 'Drop':
             color = '#ffc8c8'
             shape = 'cds'
-            label = format(1-row['conversion_rate'], '%')+' ('+str((1-row['conversion_rate'])*row['users'])+')'
+            label = format(1-row['conversion_rate'], '.0%')+' ('+str(round((1-row['conversion_rate'])*row['users']))+')'
 
         else:
             shape = 'box'
