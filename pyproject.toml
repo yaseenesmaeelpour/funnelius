@@ -1,0 +1,45 @@
+[build-system]
+requires = [
+    "setuptools >= 77.0.3"
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+
+name = "funnelius_yaseen"
+
+version = "0.0.1"
+
+authors = [
+  { name="Yaseen Esmaeelpour", email="yaseenes@gmail.com" },
+]
+
+description = "Funnelius is an open-source Python library designed to analyze and visualize complex, non-linear user funnels."
+
+readme = "README.md"
+
+dependencies = [
+    "pandas >= 2.2.3",
+    "numpy >= 2.2.5",
+    "streamlit >= 1.44.1",
+    "graphviz >= 0.20.3"
+]
+
+requires-python = ">=3.9"
+
+keywords = ["funnel", "journey", "path", "graph"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+license = "Apache-2.0"
+
+license-files = ["LICENSE"]
+
+
+[project.urls]
+Homepage = "https://github.com/yaseenesmaeelpour/funnelius"
+Issues = "https://github.com/yaseenesmaeelpour/funnelius/issues"

@@ -12,9 +12,8 @@ min_edge_count = 0
 
 
 
-# step = st.sidebar.slider('Hide Paths with users less than')
-
-st.sidebar.title('Non-Linear Funnel Analyser')
+st.sidebar.title('Funnelius')
+st.sidebar.header('Non-Linear Funnel Analyser')
 csv_file = st.sidebar.file_uploader("Choose a CSV file", accept_multiple_files=False)
 
 if csv_file is not None:
@@ -44,10 +43,11 @@ if csv_file is not None:
     general_file_name = csv_file.name.split('.')[0]
 
     draw(data, goals, min_edge_count, max_edge_width, general_file_name, show_drop, ['svg','pdf'])
+    #st.button('Zoom', general_file_name+'.svg', type='secondary', icon=':material/zoom_in:', disabled=False, use_container_width=False)
     st.image(general_file_name+'.svg',width=1000)
     with open(general_file_name+'.pdf', 'rb') as file:
         st.sidebar.download_button(
-            label='Download Graph',
+            label='Download PDF',
             data=file,
             file_name=general_file_name+'.pdf',
             mime='image/pdf',

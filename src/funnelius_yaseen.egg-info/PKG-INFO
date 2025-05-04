@@ -1,3 +1,23 @@
+Metadata-Version: 2.4
+Name: funnelius_yaseen
+Version: 0.0.1
+Summary: Funnelius is an open-source Python library designed to analyze and visualize complex, non-linear user funnels.
+Author-email: Yaseen Esmaeelpour <yaseenes@gmail.com>
+License-Expression: Apache-2.0
+Project-URL: Homepage, https://github.com/yaseenesmaeelpour/funnelius
+Project-URL: Issues, https://github.com/yaseenesmaeelpour/funnelius/issues
+Keywords: funnel,journey,path,graph
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=2.2.3
+Requires-Dist: numpy>=2.2.5
+Requires-Dist: streamlit>=1.44.1
+Requires-Dist: graphviz>=0.20.3
+Dynamic: license-file
+
 # Funnelius
 
 **Funnelius** is an open-source Python library designed to analyze and visualize complex, non-linear user funnels. Built with Pandas, Graphviz, and Streamlit, it allows data scientists and analysts to easily track user journeys, calculate conversion rates, and identify bottlenecks in real-time.
@@ -41,21 +61,8 @@ Render the funnel analysis:
 fa.render(df)
 ```
 
+
 Funnelius will process this data and generate a visual funnel with conversion rates, drop-off percentages, and more.
-
-You can pass this optional parameters to fine tune funnel: 
-
-- df: The input pandas DataFrame containing user journey data with user_id, action, and action_start columns.
-
-- title: Filename (without extension) used for exporting the final funnel visualization as a PDF.
-
-- first_activities_filter: Optional list of starting actions to include; filters out journeys that begin with other actions.
-
-- goals: List of actions that define successful completion of the journey (used to calculate conversion).
-
-- max_path_num: Maximum number of unique user paths to display in the graph; 0 means show all.
-
-- show_drop: Boolean flag to include or exclude drop-off data from the funnel visualization.
 
 ### Streamlit GUI
 
@@ -65,9 +72,8 @@ Run the app with:
 ```bash
 streamlit run interactive.py
 ```
-screenshot:
 
-<kbd><img src="images/Screenshot.png" alt="My Image with Gray Border" style="border:2px solid #000;"></kbd>
+![screenshot](images/Screenshot.png)
 
 ## Contributing
 

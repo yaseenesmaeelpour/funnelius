@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+src/funnelius/__init__.py
+src/funnelius/functions.py
+src/funnelius/interactive.py
+src/funnelius_yaseen.egg-info/PKG-INFO
+src/funnelius_yaseen.egg-info/SOURCES.txt
+src/funnelius_yaseen.egg-info/dependency_links.txt
+src/funnelius_yaseen.egg-info/requires.txt
+src/funnelius_yaseen.egg-info/top_level.txt

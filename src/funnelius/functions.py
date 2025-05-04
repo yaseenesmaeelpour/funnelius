@@ -138,6 +138,7 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
                 <TR><TD COLSPAN="2" ALIGN="CENTER"><B>"""+row['action']+"""</B></TD></TR>
                 <TR><TD COLSPAN="2" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>
                 <TR><TD ALIGN="LEFT">Users:</TD><TD>"""+str(row['users'])+"""</TD></TR>
+                <TR><TD ALIGN="LEFT">% of total users:</TD><TD>"""+format((row['percent_of_total']),'.0%')+"""</TD></TR>
                 <TR><TD ALIGN="LEFT">Conversion:</TD><TD>"""+format(row['conversion_rate'], '.0%')+"""</TD></TR>
                 <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>"""+str(int('0' if pd.isna(row['duration_median']) else row['duration_median'] ))+"""</TD></TR>
             </TABLE>
@@ -159,7 +160,7 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
         
         if (row['action'][:4] == 'Drop' and show_drop) or row['action'][:4] != 'Drop':    
             dot.node(row['action'], shape = shape, label = label, style = 'filled, rounded', fillcolor=color,\
-            href='https://test.com', penwidth ='0.2', tooltip = row['action'])
+            href='', penwidth ='0.2', tooltip = row['action'])
 
     #draw edges
     for index, row in agg_data.iterrows():
