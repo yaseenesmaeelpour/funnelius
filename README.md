@@ -59,7 +59,7 @@ You can pass this optional parameters to fine tune funnel:
 
 ### Streamlit GUI
 
-The library includes an interactive user interface powered by Streamlit, allowing you to visualize and tweak funnel parameters in real-time.
+The library includes an interactive user interface powered by Streamlit, allowing you to visualize and tweak funnel parameters.
 
 Run the app python:
 
