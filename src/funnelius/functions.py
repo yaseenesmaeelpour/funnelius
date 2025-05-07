@@ -51,7 +51,7 @@ def transform(df):
 def apply_filter(df, first_actions_filter, goals):
     #filter based on first actions
     if first_actions_filter != []:
-        df = df[df['first_action'].isin(first_actions_filter) ] # & (data['country']=='nl')
+        df = df[df['first_action'].isin(first_actions_filter) ]
 
     #decide how to show end point
     df['action_next'] = df.apply( lambda row: 'End' if pd.isna(row['action_next']) and row['action'] in goals else 
@@ -89,30 +89,18 @@ def aggregate(df, route_num):
     #merge action and edge data
     agg_data = pd.merge(edge_agg_data, node_agg_data, on='action', how='left')
 
-    #add drop to end data
-    # drop_to_end = pd.DataFrame({
-    #     'action': ['Drop'],
-    #     'action_next': ['End'],
-    #     'edge_count': [-1],
-    #     'users': [agg_data[agg_data['action_next'] == 'Drop']['edge_count'].sum()],
-    #     'conversion_rate': [0],
-    #     'percent_of_total': [agg_data[agg_data['action_next'] == 'Drop']['edge_count'].sum()/total_users]
-    # })
-    # agg_data = pd.concat([agg_data, drop_to_end])
-
     return agg_data
 
-def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, export_formats):
+def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, export_formats, conditional_format_gradient=[[255,200,200],[255,255,255],[200,255,200]], conditional_format_metric = 'conversion-rate'):
     #set parameters
     excluded_actions = ['Start', 'Drop'] + goals
     bgcolor = '#%02x%02x%02x' % (255, 255, 255)
-    conditional_format_gradiant_color = [[255,200,200],[255,255,255],[200,255,200]] #red-->white-->green gradient
 
     #initialize graphvize engine
     dot = graphviz.Digraph(comment='')
     dot.attr(label='', labelloc='top', fontsize='20', fontcolor='black', bgcolor=bgcolor)
 
-    nodes_start_data = agg_data[['action','users','conversion_rate','duration_median', 'percent_of_total']].drop_duplicates()
+    nodes_start_data = agg_data[['action','users','conversion_rate','duration_median', 'duration_mean', 'percent_of_total']].drop_duplicates()
     nodes_end_data = agg_data[~agg_data['action_next'].isin(agg_data['action'])]
     nodes_end_data = nodes_end_data[['action_next', 'conversion_rate', 'users']]
     nodes_end_data.rename(columns={'action_next':'action'}, inplace=True)
@@ -135,28 +123,36 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
             color = "#fff"
             label = """<
             <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
-                <TR><TD COLSPAN="2" ALIGN="CENTER"><B>"""+row['action']+"""</B></TD></TR>
+                <TR><TD COLSPAN="2" ALIGN="CENTER"><B>""" + row['action'] + """</B></TD></TR>
                 <TR><TD COLSPAN="2" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>
-                <TR><TD ALIGN="LEFT">Users:</TD><TD>"""+str(row['users'])+"""</TD></TR>
-                <TR><TD ALIGN="LEFT">% of total users:</TD><TD>"""+format((row['percent_of_total']),'.0%')+"""</TD></TR>
-                <TR><TD ALIGN="LEFT">Conversion:</TD><TD>"""+format(row['conversion_rate'], '.0%')+"""</TD></TR>
-                <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>"""+str(int('0' if pd.isna(row['duration_median']) else row['duration_median'] ))+"""</TD></TR>
-            </TABLE>
-            >"""
+                <TR><TD ALIGN="LEFT">Users:</TD><TD>""" + str(row['users']) + """</TD></TR>
+                <TR><TD ALIGN="LEFT">% of total users:</TD><TD>""" + format((row['percent_of_total']),'.0%') + """</TD></TR>"""
+            if not row['action'] in goals:
+                label += """<TR><TD ALIGN="LEFT">Conversion:</TD><TD>""" + format(row['conversion_rate'], '.0%') + """</TD></TR>
+                <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>""" + '{:.1f}'.format(0 if pd.isna(row['duration_median']) else row['duration_median'] , '.0') + """</TD></TR>"""
+            label += '</TABLE>>'
 
-            #calculate conditional format colors
-            max_conversion_rate = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')['conversion_rate'].max()
-            min_conversion_rate = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')['conversion_rate'].min()
-            color_distance = (row['conversion_rate']- min_conversion_rate)/(max_conversion_rate- min_conversion_rate)
-            if color_distance < 0.5:
-                color_red_part   = conditional_format_gradiant_color[0][0] + (conditional_format_gradiant_color[1][0]-conditional_format_gradiant_color[0][0])*color_distance/0.5
-                color_green_part = conditional_format_gradiant_color[0][1] + (conditional_format_gradiant_color[1][1]-conditional_format_gradiant_color[0][1])*color_distance/0.5
-                color_blue_part  = conditional_format_gradiant_color[0][2] + (conditional_format_gradiant_color[1][2]-conditional_format_gradiant_color[0][2])*color_distance/0.5
+            #calculate conditional format colors //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            conditional_format_metric = conditional_format_metric.replace('-','_')
+            max_metric = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')[conditional_format_metric].max()
+            min_metric = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')[conditional_format_metric].min()
+            
+            if max_metric == min_metric or np.isnan(row[conditional_format_metric]):
+                color_distance = 0
             else:
-                color_red_part   = conditional_format_gradiant_color[1][0] + (conditional_format_gradiant_color[2][0]-conditional_format_gradiant_color[1][0])*(color_distance-0.5)/0.5
-                color_green_part = conditional_format_gradiant_color[1][1] + (conditional_format_gradiant_color[2][1]-conditional_format_gradiant_color[1][1])*(color_distance-0.5)/0.5
-                color_blue_part  = conditional_format_gradiant_color[1][2] + (conditional_format_gradiant_color[2][2]-conditional_format_gradiant_color[1][2])*(color_distance-0.5)/0.5                 
+                color_distance = (row[conditional_format_metric]- min_metric)/(max_metric- min_metric)
+            
+            if color_distance < 0.5:
+                color_red_part   = conditional_format_gradient[0][0] + (conditional_format_gradient[1][0]-conditional_format_gradient[0][0])*color_distance/0.5
+                color_green_part = conditional_format_gradient[0][1] + (conditional_format_gradient[1][1]-conditional_format_gradient[0][1])*color_distance/0.5
+                color_blue_part  = conditional_format_gradient[0][2] + (conditional_format_gradient[1][2]-conditional_format_gradient[0][2])*color_distance/0.5
+            else:
+                color_red_part   = conditional_format_gradient[1][0] + (conditional_format_gradient[2][0]-conditional_format_gradient[1][0])*(color_distance-0.5)/0.5
+                color_green_part = conditional_format_gradient[1][1] + (conditional_format_gradient[2][1]-conditional_format_gradient[1][1])*(color_distance-0.5)/0.5
+                color_blue_part  = conditional_format_gradient[1][2] + (conditional_format_gradient[2][2]-conditional_format_gradient[1][2])*(color_distance-0.5)/0.5                 
             color = '#%02x%02x%02x' % ( int(color_red_part), int(color_green_part), int(color_blue_part) )
+            #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         
         if (row['action'][:4] == 'Drop' and show_drop) or row['action'][:4] != 'Drop':    
             dot.node(row['action'], shape = shape, label = label, style = 'filled, rounded', fillcolor=color,\
