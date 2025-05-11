@@ -4,12 +4,14 @@
 
 ## Features
 
-- **Visualize Complex Funnels**: Analyze non-linear, conditional funnels where the next step depends on previous answers or actions.
+- **Visualize Complex Funnels**: Analyze and visualize non-linear, conditional funnels where the next step depends on previous answers or actions.
 - **Conversion Rate Calculation**: Automatically calculates conversion rates at each step of the funnel.
 - **Bottleneck Detection**: Uses conditional formatting to highlight steps with low conversion rates or long durations.
+- **Comparison**: Ability to compare two funnel data and see differences.
+- **Answe Contribution**: Show answer contribution of every step and changes.
 - **Filter and Clean Data**: Filters out noise and irrelevant data to focus on the most important routes.
 - **Interactive UI**: Powered by Streamlit, providing a GUI to tweak parameters and see changes instantly.
-- **PDF Export**: Generate and download funnel visualizations as PDF files.
+- **PDF Export**: Generate funnel visualizations as PDF files.
 
 ## Installation
 
