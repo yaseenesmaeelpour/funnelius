@@ -289,20 +289,20 @@ conditional_format_metric = 'conversion-rate', metrics=['conversion-rate','users
     for ext in export_formats:       
         dot.render(title, view=False, format=ext)
 
-def render(df, title='export', first_activities_filter = [], goals = [], max_path_num = 0, show_drop = True , show_answer=False, comparison_df = None, gradient = [[255,205,205],[255,255,255],[205,255,205]], gradient_metric = 'conversion-rate'):
+def render(df, title='export', first_actions_filter = [], goals = [], max_path_num = 0, show_drop = True , show_answer=False, comparison_df = None, gradient = [[255,205,205],[255,255,255],[205,255,205]], gradient_metric = 'conversion-rate'):
     max_edge_width = 20
     min_edge_count = 0
 
     if comparison_df is None:
-        has_comparison_df = True
-    else:
         has_comparison_df = False
+    else:
+        has_comparison_df = True
 
-    data, first_activities, all_activities = transform(df)
+    data, first_actions, all_actions = transform(df)
     if has_comparison_df == True:
         data_compare, __v1, all_actions_compare = transform(comparison_df)
 
-    data, route_num =  apply_filter(data, first_activities_filter, goals)
+    data, route_num =  apply_filter(data, first_actions_filter, goals)
     if has_comparison_df == True:
         data_compare, route_num_compare = apply_filter(data_compare, first_actions_filter, goals)
         oute_num = max(route_num, route_num_compare)
