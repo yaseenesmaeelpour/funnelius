@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 name = "funnelius"
 
-version = "0.0.1"
+version = "0.0.2"
 
 authors = [
   { name="Yaseen Esmaeelpour", email="yaseenes@gmail.com" },
