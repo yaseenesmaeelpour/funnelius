@@ -4,6 +4,9 @@
 
 **Funnelius** is an open-source Python library designed to analyze and visualize complex, non-linear user funnels. Built with Pandas, Graphviz, and Streamlit, it allows data scientists and analysts to easily track user journeys, calculate conversion rates, and identify bottlenecks.
 
+## Prerequisites
+Please ensure that you have **graphviz** and **streamlit** installed and these tools can be accessed in your Operation System's path.
+
 ## Features
 
 - **Visualize Complex Funnels**: Analyze and visualize non-linear, conditional funnels where the next step depends on previous answers or actions.
