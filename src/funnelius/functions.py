@@ -53,7 +53,7 @@ def apply_filter(df, first_actions_filter, goals):
     if first_actions_filter != []:
         df = df[df['first_action'].isin(first_actions_filter) ]
 
-    #decide how to show end point
+    #decide how to show end point for user
     df['action_next'] = df.apply( lambda row: 'End' if pd.isna(row['action_next']) and row['action'] in goals else 
                                     ('Drop'+row['action'] if pd.isna(row['action_next']) else row['action_next']), axis=1)
 
@@ -71,7 +71,7 @@ def aggregate(df, route_num):
     # filter maximum routes
     df = df[df['route_order'] <= route_num]
 
-    #calculte node level aggregated data
+    #calculte nodes aggregated data///////////////////////////////////////////////////////////////////////////////
     node_agg_data = df.groupby('action').agg(
         duration_median = ('duration', 'median'),
         duration_mean = ('duration', 'mean'),
@@ -79,68 +79,161 @@ def aggregate(df, route_num):
         conversion_rate = ('user_id', lambda x: 1.0 - sum(df.loc[x.index, 'action_next'].str[:4] == 'Drop') / len(x)),
     ).reset_index()   
 
+    #some nodes only appear in action_next column but still we should draw them
+    missing_end_points = df[~df['action_next'].isin(df['action'])]
+    missing_end_points = missing_end_points.groupby('action_next').agg(
+        users = ('user_id', 'count')
+    ).reset_index()  
+    missing_end_points.rename(columns={'action_next':'action'}, inplace=True)
+    
+    node_agg_data = pd.concat([node_agg_data, missing_end_points])
+    
+
     #calcualte total users
     total_users = int(df[df['action'] == 'Start']['user_id'].count())
     node_agg_data['percent_of_total'] =  node_agg_data.apply( lambda row: row['users']/total_users , axis=1)
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    #Calculate aggregated answer data ////////////////////////////////////////////////////////////////////////
+    answer_agg_data = df.groupby(['action','answer']).agg(answer_count = ('answer','count'))
+    answer_agg_data = answer_agg_data.reset_index()
+    answer_agg_data = answer_agg_data.sort_values(['action', 'answer_count'], ascending=[True, False])
+    answer_agg_data['answer_order'] = answer_agg_data.groupby('action').cumcount() + 1
+    answer_agg_data.loc[answer_agg_data['answer_order'] > 5, 'answer'] = 'Other items'
+    answer_agg_data = answer_agg_data.groupby(['action','answer']).agg(answer_count = ('answer_count','sum'))
+    answer_agg_data = answer_agg_data.reset_index()
+    answer_agg_data = answer_agg_data.sort_values(['action', 'answer_count'], ascending=[True, False])
+    answer_total = answer_agg_data.groupby('action').agg(total = ('answer_count','sum')).reset_index()
+    answer_agg_data = pd.merge(answer_agg_data,answer_total,on='action',how='left')
+    answer_agg_data['answer_percent'] = answer_agg_data['answer_count']/answer_agg_data['total']
+    answer_agg_data = answer_agg_data.drop('total', axis=1)
+    #/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    #calculate number for edges
+    #calculate edges aggregated data 
     edge_agg_data = df.groupby(['action', 'action_next']).agg(edge_count=('user_id', 'count')).reset_index()
 
     #merge action and edge data
-    agg_data = pd.merge(edge_agg_data, node_agg_data, on='action', how='left')
+    # agg_data = pd.merge(edge_agg_data, node_agg_data, on='action', how='left')
 
-    return agg_data
+    return node_agg_data, edge_agg_data, answer_agg_data
 
-def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, export_formats, conditional_format_gradient=[[255,200,200],[255,255,255],[200,255,200]], conditional_format_metric = 'conversion-rate'):
+
+def draw(node_data, edge_data, answer_data, goals, min_edge_count, max_edge_width, title, show_drop, show_answer, 
+export_formats, conditional_format_gradient=[[255,200,200],[255,255,255],[200,255,200]], 
+conditional_format_metric = 'conversion-rate', metrics=['conversion-rate','users','percent-of-total','duration-median']):
     #set parameters
-    excluded_actions = ['Start', 'Drop'] + goals
+    excluded_actions = ['Start', 'End'] + goals
     bgcolor = '#%02x%02x%02x' % (255, 255, 255)
+    
+    #check if dataframe hase comparison data
+    has_comparison_data = 0
+    if 'users_compare' in node_data.columns:
+        has_comparison_data = 1
 
     #initialize graphvize engine
     dot = graphviz.Digraph(comment='')
     dot.attr(label='', labelloc='top', fontsize='20', fontcolor='black', bgcolor=bgcolor)
 
-    nodes_start_data = agg_data[['action','users','conversion_rate','duration_median', 'duration_mean', 'percent_of_total']].drop_duplicates()
-    nodes_end_data = agg_data[~agg_data['action_next'].isin(agg_data['action'])]
-    nodes_end_data = nodes_end_data[['action_next', 'conversion_rate', 'users']]
-    nodes_end_data.rename(columns={'action_next':'action'}, inplace=True)
-    nodes_end_data.drop_duplicates(inplace=True)
-    nodes_data = pd.concat([nodes_start_data,nodes_end_data])
+    # Draw nodes //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    for index, node in node_data.iterrows():
+        #prepare label variables
+        label_users = str(node['users'])
+        label_percent_of_total = format(node['percent_of_total'], '.0%')
+        label_conversion_rate = format(node['conversion_rate'], '.0%')
+        label_duration_median = format(node['duration_median'], '.1f')
+        if has_comparison_data == 1:
+            change_vars = {}
+            change_metrics = ['users','conversion_rate','duration_median','percent_of_total']
+            for metric in change_metrics:
+                if node[metric+'_change'] == 0:
+                    text_format = '.0%'
+                else:
+                    text_format = '+.0%'
+                change_vars['label_'+metric+'_change'] = format(node[metric+'_change'], text_format)
+                #set label colors
+                if node[metric+'_change'] > 0:
+                    change_vars['color_'+metric+'_change'] = '#006400'
+                elif node[metric+'_change'] < 0:
+                    change_vars['color_'+metric+'_change'] =  '#8b0000'
+                else:
+                    change_vars['color_'+metric+'_change'] = '#000'
 
-    for index, row in nodes_data.iterrows():
-        if row['action'] == 'Start' or row['action'] == 'End':
+        if node['action'] == 'Start' or node['action'] == 'End':
             color = '#fff'
             shape = 'circle'
-            label = row['action']
+            label = node['action']
 
-        elif row['action'][:4] == 'Drop':
+        elif node['action'][:4] == 'Drop':
             color = '#ffc8c8'
             shape = 'cds'
-            label = format(1-row['conversion_rate'], '.0%')+' ('+str(round((1-row['conversion_rate'])*row['users']))+')'
+            label = label_percent_of_total+' ('+label_users+')'
 
         else:
             shape = 'box'
             color = "#fff"
-            label = """<
-            <TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">
-                <TR><TD COLSPAN="2" ALIGN="CENTER"><B>""" + row['action'] + """</B></TD></TR>
-                <TR><TD COLSPAN="2" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>
-                <TR><TD ALIGN="LEFT">Users:</TD><TD>""" + str(row['users']) + """</TD></TR>
-                <TR><TD ALIGN="LEFT">% of total users:</TD><TD>""" + format((row['percent_of_total']),'.0%') + """</TD></TR>"""
-            if not row['action'] in goals:
-                label += """<TR><TD ALIGN="LEFT">Conversion:</TD><TD>""" + format(row['conversion_rate'], '.0%') + """</TD></TR>
-                <TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>""" + '{:.1f}'.format(0 if pd.isna(row['duration_median']) else row['duration_median'] , '.0') + """</TD></TR>"""
+            if has_comparison_data == 1:
+                colspan = '3'
+                users_change_code = '<TD><B><FONT COLOR="'+change_vars['color_users_change']+'">(' + change_vars['label_users_change'] +')</FONT></B></TD>'
+                conversion_rate_change_code = '<TD><B><FONT COLOR="'+change_vars['color_conversion_rate_change']+'">('+ change_vars['label_conversion_rate_change']+')</FONT></B></TD>'
+                percent_of_total_change_code = '<TD><B><FONT COLOR="'+change_vars['color_percent_of_total_change']+'">('+ change_vars['label_percent_of_total_change']+')</FONT></B></TD>'
+                duration_median_change_code = '<TD><B><FONT COLOR="'+change_vars['color_duration_median_change']+'">('+ change_vars['label_duration_median_change']+')</FONT></B></TD>'
+            else:
+                colspan = '2'
+                users_change_code = ''
+                conversion_rate_change_code = ''
+                percent_of_total_change_code = ''
+                duration_median_change_code = ''
+
+            label = '<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="1" CELLSPACing="0" BGCOLOR="transparent" STYLE="rounded">'
+            label += '<TR><TD COLSPAN="' + colspan + '" ALIGN="CENTER"><B>' + node['action'] + '</B></TD></TR>'
+            label += '<TR><TD COLSPAN="' + colspan + '" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>'
+            
+            if 'users' in metrics:
+                label += '<TR><TD ALIGN="LEFT">Users:</TD><TD>' + label_users + '</TD>' + users_change_code + '</TR>'
+            if 'percent-of-total' in metrics:
+                label += '<TR><TD ALIGN="LEFT">% of total users:</TD><TD>' + label_percent_of_total + '</TD>' + percent_of_total_change_code + '</TR>'
+            if not node['action'] in goals:
+                if 'conversion-rate' in metrics:
+                    label += '<TR><TD ALIGN="LEFT">Conversion:</TD><TD>' + label_conversion_rate + '</TD>' + conversion_rate_change_code + '</TR>'
+                if 'duration-median' in metrics:
+                    label += '<TR><TD ALIGN="LEFT">Duration (sec):</TD><TD>' + label_duration_median + '</TD>' + duration_median_change_code +'</TR>'
+
+            #add answers//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            if show_answer == True:
+                action_answers = answer_data[answer_data['action'] == node['action']]
+                if len(action_answers) > 0:
+                    label += '<TR><TD COLSPAN="' + colspan + '" ALIGN="CENTER"><B>Answers</B></TD></TR>'
+                    label += '<TR><TD COLSPAN="' + colspan + '" ALIGN="CENTER" BGCOLOR="#aaa"></TD></TR>'
+                    
+                    action_answers = answer_data[answer_data['action'] == node['action']]
+                    for index,answer in action_answers.iterrows():
+                        label_answer_percent = format(answer['answer_percent'], '.0%')
+                        if has_comparison_data == 1:
+                            answer_percent_change_formatted = format(answer['answer_percent_change'], '+.0%')
+                            #set label colors
+                            if answer['answer_percent_change'] > 0:
+                                answer_change_color = '#006400'
+                            elif answer['answer_percent_change'] < 0:
+                                answer_change_color =  '#8b0000'
+                            else:
+                                answer_change_color = '#000'
+                            answer_percent_change_code = '<TD><B><FONT COLOR="'+answer_change_color+'">(' + answer_percent_change_formatted +')</FONT></B></TD>'
+                        else:
+                            answer_percent_change_code = ''
+                        label += '<TR><TD ALIGN="LEFT">'+answer['answer']+'</TD><TD>'+label_answer_percent+'</TD>' + answer_percent_change_code + '</TR>'
+            #/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
             label += '</TABLE>>'
 
             #calculate conditional format colors //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             conditional_format_metric = conditional_format_metric.replace('-','_')
-            max_metric = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')[conditional_format_metric].max()
-            min_metric = agg_data.query('action not in @excluded_actions and edge_count >= @min_edge_count')[conditional_format_metric].min()
+            max_metric = node_data.query('action not in @excluded_actions')[conditional_format_metric].max()
+            min_metric = node_data.query('action not in @excluded_actions')[conditional_format_metric].min()
             
-            if max_metric == min_metric or np.isnan(row[conditional_format_metric]):
+            if max_metric == min_metric or np.isnan(node[conditional_format_metric]):
                 color_distance = 0
             else:
-                color_distance = (row[conditional_format_metric]- min_metric)/(max_metric- min_metric)
+                color_distance = (node[conditional_format_metric]- min_metric)/(max_metric- min_metric)
             
             if color_distance < 0.5:
                 color_red_part   = conditional_format_gradient[0][0] + (conditional_format_gradient[1][0]-conditional_format_gradient[0][0])*color_distance/0.5
@@ -154,53 +247,108 @@ def draw(agg_data, goals, min_edge_count, max_edge_width, title, show_drop, expo
             #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
-        if (row['action'][:4] == 'Drop' and show_drop) or row['action'][:4] != 'Drop':    
-            dot.node(row['action'], shape = shape, label = label, style = 'filled, rounded', fillcolor=color,\
-            href='', penwidth ='0.2', tooltip = row['action'])
+        if (node['action'][:4] == 'Drop' and show_drop) or node['action'][:4] != 'Drop':    
+            dot.node(node['action'], shape = shape, label = label, style = 'filled, rounded', fillcolor=color,\
+            href='', penwidth ='0.2', tooltip = node['action'])
 
     #draw edges
-    for index, row in agg_data.iterrows():
+    for index, edge in edge_data.iterrows():
         edge_style = 'solid'
-        if (row['action_next'][:4] == 'Drop' and show_drop) or row['action_next'][:4] != 'Drop':  
-            if row['edge_count'] > min_edge_count: ## and not row['action_next']=='End':
-                edge_width = str(max(0.5,(row['edge_count']-min_edge_count)/(agg_data['edge_count'].max()-min_edge_count)*max_edge_width))
-                if row['action_next'][:4] == 'Drop':
+        if (edge['action_next'][:4] == 'Drop' and show_drop) or edge['action_next'][:4] != 'Drop':  
+            if edge['edge_count'] >= min_edge_count:
+                #calculate edge width
+                edge_width = (edge['edge_count']-min_edge_count)/(edge_data['edge_count'].max()-min_edge_count)*max_edge_width
+                edge_width = max(0.5, edge_width) # ensure line is not super thin and is visible
+                edge_width = str(edge_width)
+                
+                #set edge color
+                if edge['action_next'][:4] == 'Drop':
                     edge_color = '#%02x%02x%02x' % (255,200,200)
-                elif row['action_next'] == 'Posted':
-                    edge_color = '#%02x%02x%02x' % (200,255,200)
                 else:
                     edge_color = '#%02x%02x%02x' % (200,200,200)
 
                 #only show edge labels for funnel not drops
-                if row['action_next'][:4] == 'Drop':
+                if edge['action_next'][:4] == 'Drop':
                     label = ''
                     edge_dir = 'forward'
                     head_port = 'center'
                     tailport = 'center'
                     weight = '1'
                 else:
-                    label = str(row['edge_count'])
+                    label = str(edge['edge_count'])
                     edge_dir = 'forward'
                     tailport = 'center'
                     head_port='center'
-                    weight = '7'
+                    weight = str(edge['edge_count'])
 
-                dot.edge(str(row['action']), str(row['action_next']), label=label , penwidth = edge_width, color = edge_color, style = edge_style, dir = edge_dir, tailport = tailport, headport = head_port, weight = weight)
+                dot.edge(str(edge['action']), str(edge['action_next']), label=label , penwidth = edge_width, 
+                color = edge_color, style = edge_style, dir = edge_dir, tailport = tailport, 
+                headport = head_port, weight = weight)
 
     #render graph 
     for ext in export_formats:       
         dot.render(title, view=False, format=ext)
 
-def render(df, title='export', first_activities_filter = [], goals = [], max_path_num = 0, show_drop = True):
+def render(df, title='export', first_activities_filter = [], goals = [], max_path_num = 0, show_drop = True , show_answer=False, comparison_df = None, gradient = [[255,205,205],[255,255,255],[205,255,205]], gradient_metric = 'conversion-rate'):
     max_edge_width = 20
     min_edge_count = 0
 
+    if comparison_df is None:
+        has_comparison_df = True
+    else:
+        has_comparison_df = False
+
     data, first_activities, all_activities = transform(df)
+    if has_comparison_df == True:
+        data_compare, __v1, all_actions_compare = transform(comparison_df)
+
     data, route_num =  apply_filter(data, first_activities_filter, goals)
+    if has_comparison_df == True:
+        data_compare, route_num_compare = apply_filter(data_compare, first_actions_filter, goals)
+        oute_num = max(route_num, route_num_compare)
+
     if max_path_num > 0:
         route_num = min(route_num,max_path_num)
-    data = aggregate(data, route_num)
-    draw(data, goals, min_edge_count, max_edge_width, title, show_drop, ['pdf'])
+    
+    data_node, data_edge, data_answer = aggregate(data, route_num)
+    if has_comparison_df == True:
+        data_compare_node, data_compare_edge, data_compare_answer = aggregate(data_compare, route_num)
+
+        #merge data with compare_data
+        data_node = pd.merge(data_node, data_compare_node[['action','conversion_rate','users','duration_median','duration_mean','percent_of_total']], on='action', how='left', suffixes =('','_compare')) #add nodes compare data
+        data_edge = pd.merge(data_edge, data_compare_edge[['action','action_next','edge_count']], on=['action','action_next'], how='left', suffixes =('','_compare')) #add edge compare data
+        data_answer  = pd.merge(data_answer, data_compare_answer[['action','answer','answer_percent']], on=['action','answer'], how='left', suffixes =('','_compare')) #add edge compare data
+        
+        #calculate increase/decrease percentages for nodes
+        metrics = ['conversion_rate','duration_median','percent_of_total','users']
+        for metric in metrics:
+            data_node[metric+'_change'] = data_node[metric]/data_node[metric+'_compare'] - 1
+
+        #calculate increase/decrease percentages for answers
+        data_answer['answer_percent_change'] = data_answer['answer_percent']/data_answer['answer_percent_compare'] - 1
+        data_answer
+
+        #calculate increase/decrease percentages for edges
+        data_edge['edge_count_change'] = data_edge['edge_count']/data_edge['edge_count_compare'] - 1
+        
+        #add nodes that were present in comparison data but not in original data
+        nodes_only_in_comparison = data_compare_node[~data_compare_node['action'].isin(data_node['action'])]
+        nodes_only_in_comparison = nodes_only_in_comparison[['action']]
+        nodes_only_in_comparison[['users', 'percent_of_total']] = 0
+        nodes_only_in_comparison[['conversion_rate', 'duration_median', 'duration_mean',
+        'conversion_rate_change', 'duration_median_change']] = np.nan
+        nodes_only_in_comparison[['users_change', 'percent_of_total_change']] = -1
+        data_node = pd.concat([data_node, nodes_only_in_comparison])
+
+        #add edges that were present in comparison data but not in original data
+        edges_only_in_comparison = data_compare_edge.merge(data_edge, on=['action','action_next'], how='left', indicator=True)
+        edges_only_in_comparison = edges_only_in_comparison[edges_only_in_comparison['_merge'] == 'left_only'].drop(columns=['_merge'])
+        edges_only_in_comparison = edges_only_in_comparison[['action', 'action_next']]
+        edges_only_in_comparison['edge_count'] = 0
+        edges_only_in_comparison['edge_count_change'] = -1
+        data_edge = pd.concat([data_edge, edges_only_in_comparison])
+
+    draw(data_node, data_edge, data_answer, goals, min_edge_count, max_edge_width, title, show_drop, show_answer, ['pdf'], gradient , gradient_metric )
 
 def interactive():
     import subprocess
