@@ -289,7 +289,8 @@ conditional_format_metric = 'conversion-rate', metrics=['conversion-rate','users
     for ext in export_formats:       
         dot.render(title, view=False, format=ext)
 
-def render(df, title='export', first_actions_filter = [], goals = [], max_path_num = 0, show_drop = True , show_answer=False, comparison_df = None, gradient = [[255,205,205],[255,255,255],[205,255,205]], gradient_metric = 'conversion-rate'):
+def render(df, title='export', first_actions_filter = [], goals = [], max_path_num = 0, show_drop = True , show_answer=False, comparison_df = None, 
+gradient = [[255,205,205],[255,255,255],[205,255,205]], gradient_metric = 'conversion-rate', metrics = ['conversion-rate','users','percent-of-total','duration-median']):
     max_edge_width = 20
     min_edge_count = 0
 
@@ -348,7 +349,7 @@ def render(df, title='export', first_actions_filter = [], goals = [], max_path_n
         edges_only_in_comparison['edge_count_change'] = -1
         data_edge = pd.concat([data_edge, edges_only_in_comparison])
 
-    draw(data_node, data_edge, data_answer, goals, min_edge_count, max_edge_width, title, show_drop, show_answer, ['pdf'], gradient , gradient_metric )
+    draw(data_node, data_edge, data_answer, goals, min_edge_count, max_edge_width, title, show_drop, show_answer, ['pdf'], gradient , gradient_metric, metrics)
 
 def interactive():
     import subprocess

@@ -49,13 +49,23 @@ You can pass this optional parameters to fine tune funnel:
 
 - **title:** Filename (without extension) used for exporting the final funnel visualization as a PDF.
 
-- **first_activities_filter:** Optional list of starting actions to include; filters out journeys that begin with other actions.
+- **first_actions_filter:** Optional list of starting actions to include; filters out journeys that begin with other actions.
 
 - **goals:** List of actions that define successful completion of the journey (used to calculate conversion).
 
 - **max_path_num:** Maximum number of unique user paths to display in the graph; 0 means show all.
 
 - **show_drop:** Boolean flag to include or exclude drop-off data from the funnel visualization.
+
+- **show_answer:** Boolean flag to shw/hide answer  contribution in the funnel visualization.
+
+- **comparison_df:** The DataFrame containing user journey data that you want to use to compare.
+
+- **gradient:** A list with length 3 that contains gradient color data in RGB points. for example: gradient = [[255,205,205],[255,255,255],[205,255,205]] 
+
+- **gradient_metric:** Metric that should be used for condtional formatting. Possible values are: **users**, **conversion-rate**, **percent-of-total** and **duration-median**
+
+- **metrics:** A list of metrics to show in every step. Possible values are: **users**, **conversion-rate**, **percent-of-total** and **duration-median**
 
 ### Streamlit GUI
 
