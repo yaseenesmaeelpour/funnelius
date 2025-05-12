@@ -37,10 +37,10 @@ import funnelius as fa
 ```
 2- Prepare your funnel data in a pandas DataFrame with these structure:
 
-| user_id | action | action_start |
-|----------|----------|----------|
-| 1 | 1st question | 2025-04-10 12:04:15.00 | 
-| 1 | 2nd question | 2025-04-10 12:05:17.00 | 
+| user_id | action | action_start | answer |
+|----------|----------|----------|----------|
+| 1 | 1st question | 2025-04-10 12:04:15.00 | Yes | 
+| 1 | 2nd question | 2025-04-10 12:05:17.00 | No |
 
 Render the funnel analysis:
 
