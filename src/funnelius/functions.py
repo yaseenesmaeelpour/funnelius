@@ -369,7 +369,6 @@ def aggregate_pl(df, route_num, max_visible_answers):
     )
 
     # Step 4: Replace answers with 'Other items' if answer_order > max_visible_answers
-    print answer_agg_data
 
     answer_agg_data = answer_agg_data.with_columns(
         pl.when(pl.col('answer_order') > max_visible_answers)
