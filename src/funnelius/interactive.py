@@ -1,27 +1,74 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from functions import transform, apply_filter, aggregate, draw
+from functions import transform, apply_filter, aggregate, draw, hex_to_rgb
+
+compare_file = None
+# function used to write a sample python code and jupyter noot book files /////////////////////////////////////////////////
+def write_python():
+    global csv_file
+    global compare_file
+    global first_actions_filter
+    global goals
+    global max_routes
+    global show_drop
+    global show_answer
+    global max_visible_answers
+    global gradient
+    global gradient_metric
+    global metrics
+
+    with open('funnelius_code.py', 'w') as f:
+        text = '# import neccessary libraries\n'
+        text += 'import pandas as pd\n'
+        text += 'import funnelius as fs\n'
+        text += '\n#read csv file\n'
+        text += 'df = pd.read_csv("'+csv_file.name+'")\n'
+
+
+        if compare_file is not None:
+            text += '\n#read comparison file\n'
+            text += 'df_compare = pd.read_csv("'+compare_file.name+'")\n'
+
+        text += '\n# render graph\n'    
+        text += 'fs.render(df'
+
+        if compare_file is not None:
+            text += ', comparison_df=df_compare'
+
+        text+= ', first_actions_filter=[' + ','.join(first_actions_filter)+']'
+        text+= ', goals=[' + ','.join(goals)+']'
+        text+= ', max_path_num=' + str(max_routes)
+        text+= ', show_drop=' + str(show_drop)
+        text+= '\n, show_answer=' + str(show_answer)
+        text+= ', max_visible_answers=' + str(max_visible_answers)
+        text+= ', gradient=' + '["'+'","'.join(x for x in gradient)+'"]'
+        text+= ', gradient_metric="' + gradient_metric+'"'
+        text+= '\n, metrics=["' + '","'.join(metrics) + '"]'
+
+        text +=')'
+        f.write(text)
+        f.close()
 
 # setting initial parameters //////////////////////////////////////////////////////
 max_edge_width = 20
 first_actions_filter =[]
 goals = ['']
-max_path_num = 0
 min_edge_count = 0
 has_compare = 0
 gradient_metric = 'conversion-rate'
-gradient = [[255,255,255],[255,255,255],[255,255,255]]
+gradient = ['#fff','#fff','#fff']
 gradient_lookup = {
-    'Red -> White -> Green':[[255,205,205],[255,255,255],[205,255,205]],
-    'Green - > White -> Red':[[205,255,205],[255,255,255],[255,205,205]],
-    'Red -> White':[[255,205,205],[255,230,230],[255,255,255]],
-    'White -> Green':[[255,255,255],[230,255,230],[205,255,205]]
+    'Red -> White -> Green':['#ffcdcd','#fff','#cdffcd'],
+    'Green - > White -> Red':['#cdffcd','#fff','#ffcdcd'],
+    'Red -> White':['#ffcdcd','#ffe6e6','#fff'],
+    'White -> Green':['#fff','#e6ffe6','#cdffcd']
 }
 
 metric_lookup = {
     'conversion-rate':'Conversion Rate',
-    'duration-median':'Duration',
+    'duration-median':'Duration Median',
+    'duration-mean':'Duration Mean',
     'percent-of-total':'% of Total Users',
     'users':'Users'
 }
@@ -67,11 +114,24 @@ if csv_file is not None:
         data_compare, route_num_compare = apply_filter(data_compare, first_actions_filter, goals)
         route_num = max(route_num, route_num_compare)
     
-    max_routes = st.sidebar.slider('Maximum paths to show', min_value=1, max_value=route_num, value=route_num) 
+
+    max_routes = st.sidebar.slider('Maximum paths to show', min_value=1, max_value=route_num, value=route_num, key="route_slider")
+
+    # show percentage of sampling based on maximum routes selected
+    if max_routes < route_num:
+        all_route_users = len(pd.unique(data['user_id']))
+        sampled_route_users = len(pd.unique(data.query('route_order <= @max_routes')['user_id']))
+        st.sidebar.text(str(int(sampled_route_users/all_route_users*100))+'% of data')
+
+    show_answer = st.sidebar.checkbox("Show Answer contriburion", value = False)
+    if show_answer == True:
+        max_visible_answers = st.sidebar.slider('Maximum Visible Answers', min_value=1, max_value=20, value=5) 
+    else:
+        max_visible_answers = 5 
  
-    data_node, data_edge, data_answer = aggregate(data, max_routes)
+    data_node, data_edge, data_answer = aggregate(data, max_routes, max_visible_answers)
     if has_compare == 1:
-        data_compare_node, data_compare_edge, data_compare_answer = aggregate(data_compare, max_routes)
+        data_compare_node, data_compare_edge, data_compare_answer = aggregate(data_compare, max_routes, max_visible_answers)
 
 
         #add compare data to original data   
@@ -82,7 +142,7 @@ if csv_file is not None:
         data_answer  = pd.merge(data_answer, data_compare_answer[['action','answer','answer_percent']], on=['action','answer'], how='left', suffixes =('','_compare')) #add edge compare data
         
         #calculate increase/decrease percentages for nodes
-        metrics = ['conversion_rate','duration_median','percent_of_total','users']
+        metrics = ['conversion_rate','duration_median','duration_mean','percent_of_total','users']
         for metric in metrics:
             data_node[metric+'_change'] = data_node[metric]/data_node[metric+'_compare'] - 1
 
@@ -97,7 +157,7 @@ if csv_file is not None:
         nodes_only_in_comparison = nodes_only_in_comparison[['action']]
         nodes_only_in_comparison[['users', 'percent_of_total']] = 0
         nodes_only_in_comparison[['conversion_rate', 'duration_median', 'duration_mean',
-        'conversion_rate_change', 'duration_median_change']] = np.nan
+        'conversion_rate_change', 'duration_median_change', 'duration_mean_change']] = np.nan
         nodes_only_in_comparison[['users_change', 'percent_of_total_change']] = -1
         data_node = pd.concat([data_node, nodes_only_in_comparison])
 
@@ -110,11 +170,10 @@ if csv_file is not None:
         data_edge = pd.concat([data_edge, edges_only_in_comparison])
 
 
-    metrics = st.sidebar.pills('Metrics to show', ['users','conversion-rate','percent-of-total','duration-median'], selection_mode = 'multi', 
+    metrics = st.sidebar.pills('Metrics to show', ['users','conversion-rate','percent-of-total','duration-median', 'duration-mean'], selection_mode = 'multi', 
     default = ['users','conversion-rate','percent-of-total','duration-median'], format_func = lambda option: metric_lookup[option])
     
     show_drop = st.sidebar.checkbox("Show drops", value = True)
-    show_answer = st.sidebar.checkbox("Show Answer contriburion", value = False)
 
     general_file_name = csv_file.name.split('.')[0]
 
@@ -127,18 +186,19 @@ if csv_file is not None:
             gradient = st.sidebar.selectbox('Gradient Color', ('Red -> White -> Green', 'Green - > White -> Red',  'Red -> White', 'White -> Green'))
             gradient = gradient_lookup[gradient]
             
+            rgb_list = hex_to_rgb(gradient)
             html = '<div width="100%" style="background: #FFDCDC;background: linear-gradient(90deg'
             for i in range(0,3):
                 html += ',rgba('
-                html += ', '.join(str(gradient[i][j]) for j in range(0,3))
+                html += ', '.join(str(rgb_list[i][j]) for j in range(0,3))
                 html += ', 1) '+str(i*50)+'%'
             html += ');"> &nbsp;</div>'
 
             st.sidebar.html(html)
-            gradient_metric = st.sidebar.selectbox('Metric', ('conversion-rate', 'duration-median', 'percent-of-total', 'users'), format_func = lambda option: metric_lookup[option] )
+            gradient_metric = st.sidebar.selectbox('Metric', ('conversion-rate', 'duration-median', 'duration-mean', 'percent-of-total', 'users'), format_func = lambda option: metric_lookup[option] )
       
     # Draw chart and load it into sttreamlit //////////////////////////////////////
-    draw(data_node, data_edge, data_answer, goals, min_edge_count, max_edge_width, general_file_name, show_drop, show_answer, ['svg','pdf'], gradient, gradient_metric, metrics = metrics)
+    draw(data_node, data_edge, data_answer, goals, min_edge_count, max_edge_width, general_file_name, show_drop, show_answer, max_visible_answers , ['svg','pdf'], gradient, gradient_metric, metrics = metrics)
     st.image(general_file_name+'.svg',width=1000)
 
     #export part of sidebar///////////////////////////////////////////////////////////////
@@ -151,8 +211,17 @@ if csv_file is not None:
             mime='image/pdf',
             icon=':material/download:',
         )
+    write_python()
+    with open('funnelius_code.py', 'rb') as code_file:
+        st.sidebar.download_button(
+            label='Download Python Code',
+            data=code_file,
+            file_name='funnelius_code.py',
+            mime='text/x-python',
+            icon=':material/download:',
+        )
+
 else:
     st.info('Please load a csv file from left sidebar.', icon="ℹ️")
-
 
 
